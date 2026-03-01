@@ -31,12 +31,4 @@ public class PersonController {
 
         return personRepository.save(newPerson);
     }
-    @PostMapping(path = "/persons")
-    @ResponseStatus(HttpStatus.CREATED)
-    @SecurityRequirement(name = "BasicAuth")
-    private Person createNewPerson(@RequestBody PersonInput personInput) {
-        String hashedPassword = passwordEncoder.encode(personInput.getPassword());
-        Person newPerson = new Person(personInput.getUsername(), hashedPassword, UserRole.USER);
-
-        return personRepository.save(newPerson);
 }
