@@ -32,8 +32,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return new User(person.getUsername(), person.getPasswordHash(), getAuthorities(person));
     }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Person> personOptional = personRepository.findByUsername(username);
+        if (personOptional.isEmpty()) {
+            throw new UsernameNotFoundException("Username %s does not exist".formatted(username));
+        }
+        Person person = personOptional.get();
+
+        return new User(person.getUsername(), person.getPasswordHash(), getAuthorities(person));
+    }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Person person) {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + person.getRole().name()));
     }
 }
+

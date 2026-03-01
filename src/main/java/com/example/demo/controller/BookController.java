@@ -43,4 +43,19 @@ public class BookController {
 
         return bookRepository.save(newBook);
     }
+
+    @GetMapping(path = "/books")
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    @GetMapping(path = "/books/{id}")
+    public Book bookById(@PathVariable Long id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        if (bookOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " not available");
+        }
+
+        return bookOptional.get();
+    }
 }
